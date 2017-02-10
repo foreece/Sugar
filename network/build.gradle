@@ -31,5 +31,7 @@ dependencies {
 
     //retrofit2: a network library
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
+    //gson-convert
+    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
 
 }
