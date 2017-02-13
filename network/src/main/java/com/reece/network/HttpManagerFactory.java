@@ -9,6 +9,6 @@ import com.reece.network.retrofit.RetrofitHttpManager;
 public class HttpManagerFactory {
 
     public static IHttpManager createRetrofitHttpManager() {
-        return RetrofitHttpManager.getInstance();
+        return RetrofitHttpManager.get();
     }
 }
