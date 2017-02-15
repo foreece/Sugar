@@ -31,7 +31,8 @@ dependencies {
 
     //retrofit2: a network library
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
-    //gson-convert
+    //Gson-Convert
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'
-
+    //Retrofit Log
+    compile group: 'com.squareup.okhttp3', name: 'logging-interceptor', version: '3.4.1'
 }

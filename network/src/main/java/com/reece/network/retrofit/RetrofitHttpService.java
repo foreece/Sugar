@@ -6,7 +6,7 @@ import retrofit2.Call;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
-import retrofit2.http.Header;
+import retrofit2.http.HeaderMap;
 import retrofit2.http.POST;
 import retrofit2.http.QueryMap;
 import retrofit2.http.Url;
@@ -16,13 +16,15 @@ import retrofit2.http.Url;
  * a common retrofit interface of http
  */
 
-public interface RetrofitHttpService<T> {
+public interface RetrofitHttpService {
 
     @GET()
-    Call<T> get(@Url String url, @QueryMap Map<String, String> params, @Header("Cache-Time") String time);
+    Call<Object> get(@Url String url, @QueryMap Map<String, String> paramsMap, @HeaderMap Map<String, String> headerMap);
 
     @FormUrlEncoded
     @POST()
-    Call<T> post(@Url String url, @FieldMap Map<String, String> params, @Header("Cache-Time") String time);
+    Call<Object> post(@Url String url, @FieldMap Map<String, String> paramsMap, @HeaderMap Map<String, String> headerMap);
+
+    //TODO download file
 
 }

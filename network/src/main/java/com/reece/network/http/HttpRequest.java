@@ -1,5 +1,8 @@
 package com.reece.network.http;
 
+import com.google.gson.GsonBuilder;
+
+import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,9 +22,14 @@ public class HttpRequest<T> {
     private String mUrl;
     private IHttpCallback<T> mHttpCallback;
     private int mHttpMethod = HTTP_GET;
-    private String mCacheTime = "0";
+    private long mTimeout; //SECOND
     private Map<String, String> mRequestParams = new HashMap<String, String>();
-    private Converter.Factory mConvertFactory = GsonConverterFactory.create();
+    private Map<String, String> mHeaderMap = new HashMap<String, String>();
+    private Converter.Factory mConvertFactory = GsonConverterFactory.create(
+            new GsonBuilder().excludeFieldsWithoutExposeAnnotation()
+                    .excludeFieldsWithModifiers(Modifier.FINAL, Modifier.TRANSIENT, Modifier.STATIC, Modifier.PRIVATE)
+                    .serializeNulls()
+                    .create());
 
     public HttpRequest(String baseUrl, String url, IHttpCallback<T> httpCallback) {
         this.mBaseUrl = baseUrl;
@@ -61,9 +69,14 @@ public class HttpRequest<T> {
         return mRequestParams;
     }
 
-    public String getCacheTime() {
-        return mCacheTime;
+    public Map<String, String> getHeaderMap() {
+        return mHeaderMap;
     }
+
+    public long getTimeout() {
+        return mTimeout;
+    }
+
 
     public void setConvertFactory(Converter.Factory convertFactory) {
         this.mConvertFactory = convertFactory;
@@ -71,5 +84,17 @@ public class HttpRequest<T> {
 
     public void setmHttpMethod(int httpMethod) {
         this.mHttpMethod = httpMethod;
+    }
+
+    public void setHeaderMap(Map<String, String> headerMap) {
+        this.mHeaderMap.putAll(headerMap);
+    }
+
+    public void addHeader(String key, String value) {
+        this.mHeaderMap.put(key, value);
+    }
+
+    public void setTimeout(long mTimeout) {
+        this.mTimeout = mTimeout;
     }
 }
