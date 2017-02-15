@@ -1,4 +1,4 @@
-package com.reece.network;
+package com.reece.sugar.common;
 
 import android.util.Log;
 
@@ -9,7 +9,7 @@ import java.lang.reflect.Method;
  * Created by foreece@gmail.com on 17-2-15.
  */
 
-public class NLog {
+public class CLog {
     /**
      * Priority constant for the println method; use Log.v.
      */
@@ -40,10 +40,10 @@ public class NLog {
      */
     public static final int ASSERT = 7;
 
-    private static String defaultTag = "NetWork";
+    private static String defaultTag = "Common";
     private static Boolean isDebugMode = null;
 
-    private NLog() {
+    private CLog() {
     }
 
     private static boolean isDebug() {

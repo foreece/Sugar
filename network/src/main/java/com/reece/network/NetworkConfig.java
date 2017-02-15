@@ -5,6 +5,5 @@ package com.reece.network;
  */
 
 public class NetworkConfig {
-    //是否是debug模式
-    public static final boolean IS_DEBUG = false;
+
 }

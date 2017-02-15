@@ -1,15 +1,17 @@
 package com.reece.network.retrofit;
 
+import com.reece.network.DebugHelper;
 import com.reece.network.IHttpManager;
 import com.reece.network.NLog;
-import com.reece.network.NetworkConfig;
 import com.reece.network.http.HttpError;
 import com.reece.network.http.HttpRequest;
 import com.reece.network.http.HttpResponse;
 import com.reece.network.http.IHttpCallback;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
@@ -69,7 +71,7 @@ public class RetrofitHttpManager implements IHttpManager {
         if (retrofit == null) {
             OkHttpClient.Builder builder = new OkHttpClient.Builder();
             builder.connectTimeout(request.getTimeout(), TimeUnit.SECONDS);
-            if (NetworkConfig.IS_DEBUG) {
+            if (DebugHelper.isDebugBuild()) {
                 builder.addInterceptor(getHttpLogInterceptor());
             }
             OkHttpClient client = builder.build();
