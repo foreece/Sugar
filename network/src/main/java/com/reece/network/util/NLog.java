@@ -1,4 +1,4 @@
-package com.reece.network;
+package com.reece.network.util;
 
 import android.util.Log;
 
