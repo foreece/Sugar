@@ -1,8 +1,14 @@
 package com.reece.network.ok;
 
+import android.os.Handler;
+import android.os.Looper;
+
 import com.reece.network.IHttpManager;
+import com.reece.network.http.HttpError;
 import com.reece.network.http.HttpRequest;
 import com.reece.network.http.HttpResponse;
+import com.reece.network.http.IHttpListener;
+import com.reece.network.thread.ThreadPool;
 import com.reece.network.util.DebugHelper;
 import com.reece.network.util.NLog;
 
@@ -23,6 +29,7 @@ public class OkHttpManager implements IHttpManager {
     private static final String TAG = "OkHttpManager";
     private static OkHttpManager INSTANCE;
     private OkHttpClient mHttpClient;
+    private Handler mMainHandler = new Handler(Looper.getMainLooper());
 
     private OkHttpManager() {
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
@@ -46,19 +53,49 @@ public class OkHttpManager implements IHttpManager {
     }
 
     @Override
-    public void request(HttpRequest request) {
+    public void request(final HttpRequest request) {
+        ThreadPool.get().execute(new Runnable() {
+            @Override
+            public void run() {
+                requestInternal(request);
+            }
+        });
+    }
+
+    private void requestInternal(final HttpRequest request) {
         Response response;
         try {
             response = mHttpClient.newCall(getRequest(request)).execute();
-            HttpResponse httpResponse = new HttpResponse();
+            final HttpResponse httpResponse = new HttpResponse();
             httpResponse.data = response.body().string();
+            final IHttpListener httpListener = request.getHttpListener();
+            if (httpListener == null) {
+                return;
+            }
             if (response.isSuccessful()) {
-                request.getHttpListener().onSuccess(httpResponse);
+                inMainThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        httpListener.onSuccess(httpResponse);
+                    }
+                });
+            } else {
+                inMainThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        HttpError error = new HttpError();
+                        httpListener.onError(error);
+                    }
+                });
             }
         } catch (IOException e) {
             e.printStackTrace();
             NLog.e(TAG, "request exception.");
         }
+    }
+
+    private void inMainThread(Runnable runnable) {
+        mMainHandler.post(runnable);
     }
 
     protected Request getRequest(HttpRequest request) {

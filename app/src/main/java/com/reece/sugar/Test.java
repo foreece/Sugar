@@ -6,12 +6,14 @@ import com.reece.network.http.HttpError;
 import com.reece.network.http.HttpRequest;
 import com.reece.network.http.HttpResponse;
 import com.reece.network.http.IHttpListener;
+import com.reece.sugar.common.CLog;
 
 /**
  * Created by foreece@gmail.com on 17-2-10.
  */
 
 public class Test {
+    private static final String TAG = "Test";
     public static void test1() {
 //        String baseUrl = "https://api.github.com";
 //        IHttpManager manager = HttpManagerFactory.createRetrofitHttpManager();
@@ -35,7 +37,7 @@ public class Test {
                 .listener(new IHttpListener<String>() {
                     @Override
                     public void onSuccess(HttpResponse<String> response) {
-
+                        CLog.d(TAG, "onSuccess() response:"+response.data);
                     }
 
                     @Override
