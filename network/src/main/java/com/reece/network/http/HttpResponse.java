@@ -1,10 +1,8 @@
 package com.reece.network.http;
 
 /**
- * Created by foreece@gmail.com on 17-2-10.
+ * Created by foreece@gmail.com on 17-2-17.
  */
 
-public class HttpResponse<T> {
-    public T data;
-
+public class HttpResponse {
 }

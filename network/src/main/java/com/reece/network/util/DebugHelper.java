@@ -1,4 +1,4 @@
-package com.reece.network;
+package com.reece.network.util;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
