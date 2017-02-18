@@ -1,5 +1,10 @@
 package com.reece.network.http;
 
+import com.google.gson.reflect.TypeToken;
+import com.reece.network.http.parser.IResponseParser;
+import com.reece.network.http.parser.JsonParser;
+
+import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,6 +21,7 @@ public class HttpRequest<T> {
     private HttpMethod mHttpMethod = HttpMethod.GET;
     private IHttpListener<T> mHttpListener;
     private RequestBody mRequestBody;
+    private IResponseParser mParser;
 
     private HttpRequest(Builder<T> builder) {
         this.mHttpUrl = builder.mHttpUrl;
@@ -24,6 +30,7 @@ public class HttpRequest<T> {
         this.mHttpMethod = builder.mHttpMethod;
         this.mHeaders = builder.mHeaders;
         this.mRequestBody = builder.mRequestBody;
+        this.mParser = builder.mParser;
     }
 
     public String getHttpUrl() {
@@ -50,6 +57,10 @@ public class HttpRequest<T> {
         return mRequestBody;
     }
 
+    public IResponseParser getParser() {
+        return mParser;
+    }
+
     public static class Builder<T> {
         private String mHttpUrl;
         private Map<String, String> mParams = new HashMap<String, String>();
@@ -57,6 +68,14 @@ public class HttpRequest<T> {
         private HttpMethod mHttpMethod = HttpMethod.GET;
         private IHttpListener<T> mHttpListener;
         private RequestBody mRequestBody;
+        private IResponseParser mParser = new JsonParser<T>(){
+
+            @Override
+            public Type getType() {
+                //默认String
+                return new TypeToken<String>(){}.getType();
+            }
+        };
 
         public Builder(String httpUrl) {
             this.mHttpUrl = httpUrl;
@@ -84,6 +103,11 @@ public class HttpRequest<T> {
 
         public Builder<T> requestBody(RequestBody requestBody) {
             this.mRequestBody = requestBody;
+            return this;
+        }
+
+        public Builder<T> parse(IResponseParser parser) {
+            this.mParser = parser;
             return this;
         }
 

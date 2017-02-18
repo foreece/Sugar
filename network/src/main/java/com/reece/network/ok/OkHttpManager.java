@@ -67,7 +67,7 @@ public class OkHttpManager implements IHttpManager {
         try {
             response = mHttpClient.newCall(getRequest(request)).execute();
             final HttpResponse httpResponse = new HttpResponse();
-            httpResponse.data = response.body().string();
+            httpResponse.data = request.getParser().parse(response.body().string());
             final IHttpListener httpListener = request.getHttpListener();
             if (httpListener == null) {
                 return;
