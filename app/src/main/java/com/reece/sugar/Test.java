@@ -5,6 +5,7 @@ import com.reece.network.HttpManagerFactory;
 import com.reece.network.IHttpManager;
 import com.reece.network.Repo;
 import com.reece.network.http.HttpError;
+import com.reece.network.http.HttpMethod;
 import com.reece.network.http.HttpRequest;
 import com.reece.network.http.HttpResponse;
 import com.reece.network.http.IHttpListener;
@@ -24,6 +25,7 @@ public class Test {
         String baseUrl = "https://api.github.com/users/foreece/repos";
         IHttpManager manager = HttpManagerFactory.createOkHttpManager();
         HttpRequest<List<Repo>> request = new HttpRequest.Builder<List<Repo>>(baseUrl)
+                .method(HttpMethod.GET)
                 .parse(new JsonParser<List<Repo>>(){
 
                     @Override

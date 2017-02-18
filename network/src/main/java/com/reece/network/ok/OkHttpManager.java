@@ -8,7 +8,9 @@ import com.reece.network.http.HttpError;
 import com.reece.network.http.HttpRequest;
 import com.reece.network.http.HttpResponse;
 import com.reece.network.http.IHttpListener;
-import com.reece.network.thread.ThreadPool;
+import com.reece.network.http.parser.IResponseParser;
+import com.reece.network.http.parser.JsonParser;
+import com.reece.network.thread.ThreadExecutor;
 import com.reece.network.util.DebugHelper;
 import com.reece.network.util.NLog;
 
@@ -54,7 +56,7 @@ public class OkHttpManager implements IHttpManager {
 
     @Override
     public void request(final HttpRequest request) {
-        ThreadPool.get().execute(new Runnable() {
+        ThreadExecutor.get().submit(new Runnable() {
             @Override
             public void run() {
                 requestInternal(request);
@@ -67,7 +69,12 @@ public class OkHttpManager implements IHttpManager {
         try {
             response = mHttpClient.newCall(getRequest(request)).execute();
             final HttpResponse httpResponse = new HttpResponse();
-            httpResponse.data = request.getParser().parse(response.body().string());
+            IResponseParser parser = request.getParser();
+            if (parser instanceof JsonParser) {
+                httpResponse.data = parser.parse(response.body().string());
+            } else {
+                httpResponse.data = parser.parse(response.body());
+            }
             final IHttpListener httpListener = request.getHttpListener();
             if (httpListener == null) {
                 return;
