@@ -13,7 +13,9 @@ public class TestActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
-        Test.test2();
+        //Test.testGet();
+        Test.testPost();
+
     }
 
     @Override

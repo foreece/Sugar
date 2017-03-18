@@ -8,5 +8,20 @@ package com.reece.network.http;
  */
 
 public class HttpError {
-    public String message;
+    private String mErrorMessage;
+    private int mErrorCode;
+
+    public HttpError(int mErrorCode) {
+        this.mErrorCode = mErrorCode;
+    }
+
+    public void setErrorMessage(String errorMessage) {
+        this.mErrorMessage = errorMessage;
+    }
+
+    public static HttpError createSimpleNetError() {
+        HttpError error = new HttpError(0);
+        error.setErrorMessage("network error");
+        return error;
+    }
 }
